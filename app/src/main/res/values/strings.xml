@@ -3,4 +3,7 @@
     <string name="start">Start</string>
     <string name="about">About</string>
     <string name="guess_whoa">Guess Whoa</string>
+    <string name="bluetooth_log_in">BlueTooth Log In</string>
+    <string name="please_enter_your_name">Please Enter Your Name</string>
+    <string name="log_in">Log In</string>
 </resources>
