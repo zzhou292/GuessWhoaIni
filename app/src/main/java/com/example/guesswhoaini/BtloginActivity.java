@@ -6,26 +6,17 @@ import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class ComSelectActivity extends AppCompatActivity{
+public class BtloginActivity extends AppCompatActivity {
 
     @Override
-    protected void onCreate  (Bundle savedInstanceState)
-
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_comselect);
+        setContentView(R.layout.activity_btlogin);
     }
-
 
     public void returnFunction(View view)
     {
         Intent intent = new Intent(this,MainActivity.class);
-        startActivity(intent);
-    }
-
-    public void btloginFunction(View view)
-    {
-        Intent intent = new Intent(this,BtloginActivity.class);
         startActivity(intent);
     }
 }
