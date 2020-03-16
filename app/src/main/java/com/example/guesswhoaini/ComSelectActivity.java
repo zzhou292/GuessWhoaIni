@@ -34,4 +34,10 @@ public class ComSelectActivity extends AppCompatActivity{
         Intent intent = new Intent(this,EthloginActivity.class);
         startActivity(intent);
     }
+
+    public void intloginFunction(View view)
+    {
+        Intent intent = new Intent(this,IntloginActivity.class);
+        startActivity(intent);
+    }
 }

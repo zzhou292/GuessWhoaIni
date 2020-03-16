@@ -13,6 +13,7 @@
         <activity android:name=".ComSelectActivity"></activity>
         <activity android:name=".BtloginActivity"></activity>
         <activity android:name=".EthloginActivity"></activity>
+        <activity android:name=".IntloginActivity"></activity>
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
