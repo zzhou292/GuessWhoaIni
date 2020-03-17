@@ -26,5 +26,11 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void painttestFunction(View view)
+    {
+        Intent intent = new Intent(this,PainttestActivity.class);
+        startActivity(intent);
+    }
+
 
 }

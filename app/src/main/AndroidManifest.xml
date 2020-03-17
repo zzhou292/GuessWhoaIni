@@ -18,6 +18,7 @@
         <activity android:name=".BtlogintestActivity"></activity>
         <activity android:name=".RegActivity"></activity>
         <activity android:name=".IntlogintestActivity"></activity>
+        <activity android:name=".PainttestActivity"></activity>
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
