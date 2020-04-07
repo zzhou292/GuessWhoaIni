@@ -57,6 +57,7 @@ public class MessageActivity extends AppCompatActivity {
     private void displayChatMessages() {
         final ListView listOfMessages = (ListView)findViewById(R.id.list_of_messages);
 
+        listOfMessages.setTranscriptMode(ListView.TRANSCRIPT_MODE_NORMAL);
         adapter = new FirebaseListAdapter<ChatMessage>(this, ChatMessage.class,
                 R.layout.message, FirebaseDatabase.getInstance().getReference()) {
             @Override
@@ -73,7 +74,7 @@ public class MessageActivity extends AppCompatActivity {
                 // Format the date before showing it
                 messageTime.setText(DateFormat.format("dd-MM-yyyy (HH:mm:ss)",
                         model.getMessageTime()));
-                counter = 0;
+
                 scrollMyListViewToBottom(listOfMessages,adapter);
             }
         };
