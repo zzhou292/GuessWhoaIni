@@ -21,9 +21,12 @@ import java.util.ArrayList;
 public class PaintView extends View {
 
     public static int BRUSH_SIZE = 20;
-    public static final int DEFAULT_COLOR = Color.RED;
+    public static final int DEFAULT_COLOR = Color.RED;  //0
+    public static final int DEFAULT_COLOR2 = Color.GREEN;  //1
+    public static final int DEFAULT_COLOR3 = Color.BLUE;  //2
     public static final int DEFAULT_BG_COLOR = Color.WHITE;
     private static final float TOUCH_TOLERANCE = 4;
+    public int colorIndicator = 0;
     private float mX, mY;
     private Path mPath;
     private Paint mPaint;
@@ -31,10 +34,6 @@ public class PaintView extends View {
     private int currentColor;
     private int backgroundColor = DEFAULT_BG_COLOR;
     private int strokeWidth;
-    private boolean emboss;
-    private boolean blur;
-    private MaskFilter mEmboss;
-    private MaskFilter mBlur;
     private Bitmap mBitmap;
     private Canvas mCanvas;
     private Paint mBitmapPaint = new Paint(Paint.DITHER_FLAG);
@@ -55,8 +54,6 @@ public class PaintView extends View {
         mPaint.setXfermode(null);
         mPaint.setAlpha(0xff);
 
-        mEmboss = new EmbossMaskFilter(new float[] {1, 1, 1}, 0.4f, 6, 3.5f);
-        mBlur = new BlurMaskFilter(5, BlurMaskFilter.Blur.NORMAL);
     }
 
     public void init(DisplayMetrics metrics) {
@@ -70,25 +67,22 @@ public class PaintView extends View {
         strokeWidth = BRUSH_SIZE;
     }
 
-    public void normal() {
-        emboss = false;
-        blur = false;
+    public void red() {
+        colorIndicator = 0;
     }
 
-    public void emboss() {
-        emboss = true;
-        blur = false;
+    public void green() {
+        colorIndicator = 1;
     }
 
-    public void blur() {
-        emboss = false;
-        blur = true;
+    public void blue() {
+        colorIndicator = 2;
     }
 
     public void clear() {
         backgroundColor = DEFAULT_BG_COLOR;
         paths.clear();
-        normal();
+        red();
         invalidate();
     }
 
@@ -98,14 +92,16 @@ public class PaintView extends View {
         mCanvas.drawColor(backgroundColor);
 
         for (FingerPath fp : paths) {
-            mPaint.setColor(fp.color);
+
             mPaint.setStrokeWidth(fp.strokeWidth);
             mPaint.setMaskFilter(null);
 
-            if (fp.emboss)
-                mPaint.setMaskFilter(mEmboss);
-            else if (fp.blur)
-                mPaint.setMaskFilter(mBlur);
+            if (fp.color==0)
+                mPaint.setColor(DEFAULT_COLOR);
+            else if (fp.color==1)
+                mPaint.setColor(DEFAULT_COLOR2);
+            else
+                mPaint.setColor(DEFAULT_COLOR3);
 
             mCanvas.drawPath(fp.path, mPaint);
 
@@ -117,7 +113,7 @@ public class PaintView extends View {
 
     private void touchStart(float x, float y) {
         mPath = new Path();
-        FingerPath fp = new FingerPath(currentColor, emboss, blur, strokeWidth, mPath);
+        FingerPath fp = new FingerPath(colorIndicator, strokeWidth, mPath);
 
         paths.add(fp);
 
