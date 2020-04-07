@@ -22,6 +22,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 
 public class MessageActivity extends AppCompatActivity {
+    int counter = 0;
     FirebaseAuth mFirebaseAuth = FirebaseAuth.getInstance();
     FirebaseUser mFirebaseUser = mFirebaseAuth.getCurrentUser();
     String emailname = mFirebaseUser.getEmail();
@@ -72,6 +73,7 @@ public class MessageActivity extends AppCompatActivity {
                 // Format the date before showing it
                 messageTime.setText(DateFormat.format("dd-MM-yyyy (HH:mm:ss)",
                         model.getMessageTime()));
+                counter = 0;
                 scrollMyListViewToBottom(listOfMessages,adapter);
             }
         };
@@ -80,12 +82,16 @@ public class MessageActivity extends AppCompatActivity {
     }
 
     private void scrollMyListViewToBottom(final ListView myListView, final Adapter myListAdapter) {
-        myListView.post(new Runnable() {
-            @Override
-            public void run() {
-                // Select the last row so it will scroll into view...
-                myListView.setSelection(myListAdapter.getCount() - 1);
-            }
-        });
+        if(counter == 0)
+        {
+            myListView.post(new Runnable() {
+                @Override
+                public void run() {
+                    // Select the last row so it will scroll into view...
+                    myListView.setSelection(myListAdapter.getCount() - 1);
+                }
+            });
+            counter++;
+        }
     }
 }
