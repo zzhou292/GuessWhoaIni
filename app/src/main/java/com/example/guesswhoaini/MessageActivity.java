@@ -6,6 +6,7 @@ import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -47,14 +48,13 @@ public class MessageActivity extends AppCompatActivity {
                         );
 
                 // Clear the input
-                System.out.println(emailname);
                 input.setText("");
             }
         });
     }
 
     private void displayChatMessages() {
-        ListView listOfMessages = (ListView)findViewById(R.id.list_of_messages);
+        final ListView listOfMessages = (ListView)findViewById(R.id.list_of_messages);
 
         adapter = new FirebaseListAdapter<ChatMessage>(this, ChatMessage.class,
                 R.layout.message, FirebaseDatabase.getInstance().getReference()) {
@@ -72,9 +72,20 @@ public class MessageActivity extends AppCompatActivity {
                 // Format the date before showing it
                 messageTime.setText(DateFormat.format("dd-MM-yyyy (HH:mm:ss)",
                         model.getMessageTime()));
+                scrollMyListViewToBottom(listOfMessages,adapter);
             }
         };
 
         listOfMessages.setAdapter(adapter);
+    }
+
+    private void scrollMyListViewToBottom(final ListView myListView, final Adapter myListAdapter) {
+        myListView.post(new Runnable() {
+            @Override
+            public void run() {
+                // Select the last row so it will scroll into view...
+                myListView.setSelection(myListAdapter.getCount() - 1);
+            }
+        });
     }
 }
