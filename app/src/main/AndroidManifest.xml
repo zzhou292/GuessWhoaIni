@@ -10,12 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".AboutActivity"></activity>
-        <activity android:name=".ComSelectActivity"></activity>
-        <activity android:name=".BtloginActivity"></activity>
-        <activity android:name=".EthloginActivity"></activity>
         <activity android:name=".IntloginActivity"></activity>
-        <activity android:name=".EthlogintestActivity"></activity>
-        <activity android:name=".BtlogintestActivity"></activity>
         <activity android:name=".RegActivity"></activity>
         <activity android:name=".IntlogintestActivity"></activity>
         <activity android:name=".PainttestActivity"></activity>

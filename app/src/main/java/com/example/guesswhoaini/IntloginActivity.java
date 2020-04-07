@@ -30,7 +30,7 @@ public class IntloginActivity extends AppCompatActivity {
         mFirebaseAuth = FirebaseAuth.getInstance();
         username = findViewById(R.id.username_edit);
         password = findViewById(R.id.password_edit);
-        btnSignIn = findViewById(R.id.button5);
+        btnSignIn = findViewById(R.id.button9);
 
         mAuthStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
