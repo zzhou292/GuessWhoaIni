@@ -118,6 +118,7 @@ public class PaintView extends View {
     private void touchStart(float x, float y) {
         mPath = new Path();
         FingerPath fp = new FingerPath(currentColor, emboss, blur, strokeWidth, mPath);
+
         paths.add(fp);
 
         mPath.reset();
@@ -132,6 +133,8 @@ public class PaintView extends View {
 
         if (dx >= TOUCH_TOLERANCE || dy >= TOUCH_TOLERANCE) {
             mPath.quadTo(mX, mY, (x + mX) / 2, (y + mY) / 2);
+            System.out.println("x"+x);
+            System.out.println("y"+y);
             mX = x;
             mY = y;
         }

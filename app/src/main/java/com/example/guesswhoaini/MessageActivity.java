@@ -15,11 +15,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.firebase.ui.database.FirebaseListAdapter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
 
 
 
 public class MessageActivity extends AppCompatActivity {
+    FirebaseAuth mFirebaseAuth = FirebaseAuth.getInstance();
+    FirebaseUser mFirebaseUser = mFirebaseAuth.getCurrentUser();
+    String emailname = mFirebaseUser.getEmail();
     private FirebaseListAdapter<ChatMessage> adapter;
 
     @Override
@@ -39,12 +43,11 @@ public class MessageActivity extends AppCompatActivity {
                         .getReference()
                         .push()
                         .setValue(new ChatMessage(input.getText().toString(),
-                                FirebaseAuth.getInstance()
-                                        .getCurrentUser()
-                                        .getDisplayName())
+                                emailname)
                         );
 
                 // Clear the input
+                System.out.println(emailname);
                 input.setText("");
             }
         });
