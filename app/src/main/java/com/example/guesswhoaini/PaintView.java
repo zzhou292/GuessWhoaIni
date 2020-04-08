@@ -15,6 +15,10 @@ import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.FirebaseOptions;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.util.ArrayList;
 
 
@@ -92,6 +96,23 @@ public class PaintView extends View {
         mCanvas.drawColor(backgroundColor);
 
         for (FingerPath fp : paths) {
+
+            FirebaseOptions options = new FirebaseOptions.Builder()
+                    .setApplicationId("guesswhoa-322a1")
+                    .setApiKey("AIzaSyCaQnv8AIWi9h0zjZSMunBOoNELiLMgYx4")
+                    .setDatabaseUrl("https://guesswhoa-322a1-58abe.firebaseio.com/")
+                    .build();
+            FirebaseApp.initializeApp(this.getContext(), options, "guesswhoa-322a1-58abe");
+            FirebaseApp secondApp = FirebaseApp.getInstance("guesswhoa-322a1-58abe");
+
+            FirebaseDatabase.getInstance(secondApp)
+                    .getReference()
+                    .push()
+                    .setValue(new FingerPath(fp.color, fp.strokeWidth, fp.path
+                            )
+                    );
+
+
 
             mPaint.setStrokeWidth(fp.strokeWidth);
             mPaint.setMaskFilter(null);

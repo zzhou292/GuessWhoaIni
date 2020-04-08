@@ -3,6 +3,7 @@ package com.example.guesswhoaini;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,7 +62,11 @@ public class MessageActivity extends AppCompatActivity {
         adapter = new FirebaseListAdapter<ChatMessage>(this, ChatMessage.class,
                 R.layout.message, FirebaseDatabase.getInstance().getReference()) {
             @Override
+
             protected void populateView(View v, ChatMessage model, int position) {
+
+                if(model.getType()!=1 && model!=null){
+                    Log.d("out",String.valueOf(model.getType()));
                 // Get references to the views of message.xml
                 TextView messageText = (TextView)v.findViewById(R.id.message_text);
                 TextView messageUser = (TextView)v.findViewById(R.id.message_user);
@@ -75,7 +80,8 @@ public class MessageActivity extends AppCompatActivity {
                 messageTime.setText(DateFormat.format("dd-MM-yyyy (HH:mm:ss)",
                         model.getMessageTime()));
 
-                scrollMyListViewToBottom(listOfMessages,adapter);
+
+                scrollMyListViewToBottom(listOfMessages,adapter);}
             }
         };
 
