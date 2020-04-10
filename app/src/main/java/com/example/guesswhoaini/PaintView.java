@@ -44,6 +44,7 @@ public class PaintView extends View {
     private Bitmap mBitmap;
     private Canvas mCanvas;
     private Paint mBitmapPaint = new Paint(Paint.DITHER_FLAG);
+    private LocDBMes dBMes= null;
 
     public PaintView(Context context) {
         this(context, null);
@@ -111,12 +112,12 @@ public class PaintView extends View {
             //FirebaseApp.initializeApp(this.getContext(), options, "guesswhoa-322a1-58abe");
             //FirebaseApp secondApp = FirebaseApp.getInstance("guesswhoa-322a1-58abe");
 
-            FirebaseDatabase.getInstance("https://guesswhoa-322a1-58abe.firebaseio.com/")
-                    .getReference()
-                    .push()
-                    .setValue(new FingerPath(fp.color, fp.strokeWidth, fp.path
-                            )
-                    );
+            //FirebaseDatabase.getInstance("https://guesswhoa-322a1-58abe.firebaseio.com/")
+                    //.getReference()
+                    //.push()
+                    //.setValue(new FingerPath(fp.color, fp.strokeWidth, fp.path,fp.x,fp.y,fp.mx,fp.my
+                     //       )
+                   // );
             mPaint.setStrokeWidth(fp.strokeWidth);
             mPaint.setMaskFilter(null);
 
@@ -137,17 +138,19 @@ public class PaintView extends View {
 
     private void touchStart(float x, float y) {
         mPath = new Path();
-        FingerPath fp = new FingerPath(colorIndicator, strokeWidth, mPath);
 
-        paths.add(fp);
 
         mPath.reset();
         mPath.moveTo(x, y);
         mX = x;
         mY = y;
+        FingerPath fp = new FingerPath(colorIndicator, strokeWidth, mPath, x,y,mX,mY);
+        paths.add(fp);
+
     }
 
     private void touchMove(float x, float y) {
+
         float dx = Math.abs(x - mX);
         float dy = Math.abs(y - mY);
 
@@ -158,6 +161,13 @@ public class PaintView extends View {
             mX = x;
             mY = y;
         }
+
+        FirebaseDatabase.getInstance("https://guesswhoa-322a1-58abe.firebaseio.com/")
+            .getReference()
+             .push()
+            .setValue(new LocDBMes(x,y,colorIndicator
+               )
+         );
     }
 
     private void touchUp() {
