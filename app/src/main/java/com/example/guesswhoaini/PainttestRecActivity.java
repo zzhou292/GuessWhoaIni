@@ -8,17 +8,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class PainttestRecActivity extends AppCompatActivity {
-    private PaintView paintView;
+    private PaintViewRec paintViewRec;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_painttest);
+        setContentView(R.layout.activity_painttestrec);
 
-        paintView = (PaintView) findViewById(R.id.paintView);
+        paintViewRec = (PaintViewRec) findViewById(R.id.paintView);
         DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
-        paintView.init(metrics);
+        paintViewRec.init(metrics);
     }
 
     //database connection code

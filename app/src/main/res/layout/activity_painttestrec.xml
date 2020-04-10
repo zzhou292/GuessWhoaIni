@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".PainttestRecActivity">
 
-    <com.example.guesswhoaini.PaintView
+    <com.example.guesswhoaini.PaintViewRec
         android:id="@+id/paintView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

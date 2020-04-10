@@ -12,20 +12,25 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
 
 
-public class PaintView extends View {
+public class PaintViewRec extends View {
 
     public static int BRUSH_SIZE = 20;
     public static final int DEFAULT_COLOR = Color.RED;  //0
@@ -45,12 +50,14 @@ public class PaintView extends View {
     private Canvas mCanvas;
     private Paint mBitmapPaint = new Paint(Paint.DITHER_FLAG);
     private LocDBMes dBMes= null;
+    private DatabaseReference mSearchedLocationReference;
 
-    public PaintView(Context context) {
+
+    public PaintViewRec(Context context) {
         this(context, null);
     }
 
-    public PaintView(Context context, AttributeSet attrs) {
+    public PaintViewRec(Context context, AttributeSet attrs) {
         super(context, attrs);
         mPaint = new Paint();
         mPaint.setAntiAlias(true);
@@ -99,25 +106,26 @@ public class PaintView extends View {
         canvas.save();
         mCanvas.drawColor(backgroundColor);
 
+        mSearchedLocationReference= FirebaseDatabase.getInstance("https://guesswhoa-322a1-58abe.firebaseio.com/")
+                .getReference();
+
+        mSearchedLocationReference.addValueEventListener(
+                new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+
+                        Log.d("Locations updated", "location: " + dataSnapshot); //log
+
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        // read query is cancelled.
+                    }
+                });
+
         for (FingerPath fp : paths) {
-
-            //FirebaseOptions options = new FirebaseOptions.Builder()
-                    //.setApplicationId("guesswhoa-322a1")
-                    //.setApiKey("AIzaSyCaQnv8AIWi9h0zjZSMunBOoNELiLMgYx4")
-                    //.setDatabaseUrl("https://guesswhoa-322a1-58abe.firebaseio.com/")
-                    //.build();
-
-
-            
-            //FirebaseApp.initializeApp(this.getContext(), options, "guesswhoa-322a1-58abe");
-            //FirebaseApp secondApp = FirebaseApp.getInstance("guesswhoa-322a1-58abe");
-
-            //FirebaseDatabase.getInstance("https://guesswhoa-322a1-58abe.firebaseio.com/")
-                    //.getReference()
-                    //.push()
-                    //.setValue(new FingerPath(fp.color, fp.strokeWidth, fp.path,fp.x,fp.y,fp.mx,fp.my
-                     //       )
-                   // );
             mPaint.setStrokeWidth(fp.strokeWidth);
             mPaint.setMaskFilter(null);
 
@@ -128,7 +136,7 @@ public class PaintView extends View {
             else
                 mPaint.setColor(DEFAULT_COLOR3);
 
-            mCanvas.drawPath(fp.path, mPaint);
+            //mCanvas.drawPath(fp.path, mPaint);
 
         }
 
@@ -136,64 +144,11 @@ public class PaintView extends View {
         canvas.restore();
     }
 
-    private void touchStart(float x, float y) {
-        mPath = new Path();
 
-
-        mPath.reset();
-        mPath.moveTo(x, y);
-        mX = x;
-        mY = y;
-        FingerPath fp = new FingerPath(colorIndicator, strokeWidth, mPath, x,y,mX,mY);
-        paths.add(fp);
-
-    }
-
-    private void touchMove(float x, float y) {
-
-        float dx = Math.abs(x - mX);
-        float dy = Math.abs(y - mY);
-
-        if (dx >= TOUCH_TOLERANCE || dy >= TOUCH_TOLERANCE) {
-            mPath.quadTo(mX, mY, (x + mX) / 2, (y + mY) / 2);
-            System.out.println("x"+x);
-            System.out.println("y"+y);
-            mX = x;
-            mY = y;
-        }
-
-        FirebaseDatabase.getInstance("https://guesswhoa-322a1-58abe.firebaseio.com/")
-            .getReference()
-             .push()
-            .setValue(new LocDBMes(x,y,colorIndicator,paths
-               )
-         );
-    }
-
-    private void touchUp() {
-        mPath.lineTo(mX, mY);
-    }
-
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        float x = event.getX();
-        float y = event.getY();
-
-        switch(event.getAction()) {
-            case MotionEvent.ACTION_DOWN :
-                touchStart(x, y);
-                invalidate();
-                break;
-            case MotionEvent.ACTION_MOVE :
-                touchMove(x, y);
-                invalidate();
-                break;
-            case MotionEvent.ACTION_UP :
-                touchUp();
-                invalidate();
-                break;
-        }
-
-        return true;
-    }
+        //FirebaseDatabase.getInstance("https://guesswhoa-322a1-58abe.firebaseio.com/")
+         //       .getReference()
+         //       .push()
+          //      .setValue(new LocDBMes(x,y,colorIndicator
+          //              )
+           //     );
 }
