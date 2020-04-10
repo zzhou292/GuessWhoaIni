@@ -32,7 +32,7 @@ public class ColorDialog extends AppCompatDialogFragment {
 
         // Inflate and set the layout for the dialog
         // Pass null as the parent view because its going in the dialog layout
-        builder.setView(inflater.inflate(R.layout.colorDialogLayout, null))
+        builder.setView(inflater.inflate(R.layout.color_dialog_layout, null))
                 // Add action buttons
                 .setPositiveButton("sign in", new DialogInterface.OnClickListener() {
                     @Override
