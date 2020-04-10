@@ -17,9 +17,12 @@ import android.view.View;
 
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+
+import static com.facebook.FacebookSdk.getApplicationContext;
 
 
 public class PaintView extends View {
@@ -97,23 +100,23 @@ public class PaintView extends View {
 
         for (FingerPath fp : paths) {
 
-            FirebaseOptions options = new FirebaseOptions.Builder()
-                    .setApplicationId("guesswhoa-322a1")
-                    .setApiKey("AIzaSyCaQnv8AIWi9h0zjZSMunBOoNELiLMgYx4")
-                    .setDatabaseUrl("https://guesswhoa-322a1-58abe.firebaseio.com/")
-                    .build();
-            FirebaseApp.initializeApp(this.getContext(), options, "guesswhoa-322a1-58abe");
-            FirebaseApp secondApp = FirebaseApp.getInstance("guesswhoa-322a1-58abe");
+            //FirebaseOptions options = new FirebaseOptions.Builder()
+                    //.setApplicationId("guesswhoa-322a1")
+                    //.setApiKey("AIzaSyCaQnv8AIWi9h0zjZSMunBOoNELiLMgYx4")
+                    //.setDatabaseUrl("https://guesswhoa-322a1-58abe.firebaseio.com/")
+                    //.build();
 
-            FirebaseDatabase.getInstance(secondApp)
+
+            
+            //FirebaseApp.initializeApp(this.getContext(), options, "guesswhoa-322a1-58abe");
+            //FirebaseApp secondApp = FirebaseApp.getInstance("guesswhoa-322a1-58abe");
+
+            FirebaseDatabase.getInstance("https://guesswhoa-322a1-58abe.firebaseio.com/")
                     .getReference()
                     .push()
                     .setValue(new FingerPath(fp.color, fp.strokeWidth, fp.path
                             )
                     );
-
-
-
             mPaint.setStrokeWidth(fp.strokeWidth);
             mPaint.setMaskFilter(null);
 
