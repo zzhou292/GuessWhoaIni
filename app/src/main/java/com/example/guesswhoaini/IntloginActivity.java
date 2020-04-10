@@ -30,7 +30,7 @@ public class IntloginActivity extends AppCompatActivity {
         mFirebaseAuth = FirebaseAuth.getInstance();
         username = findViewById(R.id.username_edit);
         password = findViewById(R.id.password_edit);
-        btnSignIn = findViewById(R.id.button5);
+        btnSignIn = findViewById(R.id.button9);
 
         mAuthStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -84,7 +84,7 @@ public class IntloginActivity extends AppCompatActivity {
                         Toast.makeText(IntloginActivity.this,"Login Error, Please Login Again",Toast.LENGTH_SHORT).show();
                     }
                     else{
-                        Intent intToHome = new Intent(IntloginActivity.this,IntlogintestActivity.class);
+                        Intent intToHome = new Intent(IntloginActivity.this,MessageActivity.class);
                         startActivity(intToHome);
                     }
                 }

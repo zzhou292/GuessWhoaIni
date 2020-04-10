@@ -5,19 +5,19 @@
     tools:context=".PainttestActivity">
 
     <item
-        android:id="@+id/normal"
+        android:id="@+id/red"
         app:showAsAction = "never"
-        android:title="Normal"/>
+        android:title="Red"/>
 
     <item
-        android:id="@+id/emboss"
+        android:id="@+id/green"
         app:showAsAction = "never"
-        android:title="Emboss"/>
+        android:title="Green"/>
 
     <item
-        android:id="@+id/blur"
+        android:id="@+id/blue"
         app:showAsAction = "never"
-        android:title="Blur"/>
+        android:title="Blue"/>
 
     <item
         android:id="@+id/clear"

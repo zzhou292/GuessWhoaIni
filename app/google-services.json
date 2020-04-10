@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "633779190964-of65hdiii2oro3ijphme2c1ufdm878n2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.guesswhoaini",
+            "certificate_hash": "282b1ad31d456915f909ad79fae966c25558fe6e"
+          }
+        },
+        {
           "client_id": "633779190964-ofhd2f692f1iajv3k6g9bt48d720fn1t.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

@@ -34,14 +34,14 @@ public class PainttestActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
-            case R.id.normal:
-                paintView.normal();
+            case R.id.red:
+                paintView.red();
                 return true;
-            case R.id.emboss:
-                paintView.emboss();
+            case R.id.green:
+                paintView.green();
                 return true;
-            case R.id.blur:
-                paintView.blur();
+            case R.id.blue:
+                paintView.blue();
                 return true;
             case R.id.clear:
                 paintView.clear();

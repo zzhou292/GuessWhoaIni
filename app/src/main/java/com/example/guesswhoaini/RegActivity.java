@@ -97,7 +97,7 @@ public class RegActivity extends AppCompatActivity {
     public void  updateUI(FirebaseUser account){
         if(account != null){
             Toast.makeText(this,"U Signed In successfully",Toast.LENGTH_LONG).show();
-            startActivity(new Intent(this,IntlogintestActivity.class));
+            startActivity(new Intent(this,MessageActivity.class));
         }else {
             Toast.makeText(this,"U Didnt signed in",Toast.LENGTH_LONG).show();
         }

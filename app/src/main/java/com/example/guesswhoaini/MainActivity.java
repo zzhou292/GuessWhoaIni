@@ -8,6 +8,7 @@ import android.view.View;
 
 public class MainActivity extends AppCompatActivity {
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void startFunction(View view)
     {
-        Intent intent = new Intent(this,ComSelectActivity.class);
+        Intent intent = new Intent(this,IntloginActivity.class);
         startActivity(intent);
     }
 
