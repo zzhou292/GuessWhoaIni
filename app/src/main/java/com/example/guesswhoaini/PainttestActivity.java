@@ -50,4 +50,12 @@ public class PainttestActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    private void onClickColorButton(){
+        openColorDialog();
+    }
+
+    private void openColorDialog(){
+
+    }
 }
