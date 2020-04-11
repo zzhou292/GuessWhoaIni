@@ -21,6 +21,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Random;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
 
@@ -45,6 +48,8 @@ public class PaintView extends View {
     private Canvas mCanvas;
     private Paint mBitmapPaint = new Paint(Paint.DITHER_FLAG);
     private LocDBMes dBMes= null;
+    private ArrayList<Coordinates> coord;
+    private HashSet<String> refKeys;
 
     public PaintView(Context context) {
         this(context, null);
@@ -52,6 +57,7 @@ public class PaintView extends View {
 
     public PaintView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        refKeys = new HashSet<String>();
         mPaint = new Paint();
         mPaint.setAntiAlias(true);
         mPaint.setDither(true);
@@ -61,7 +67,27 @@ public class PaintView extends View {
         mPaint.setStrokeCap(Paint.Cap.ROUND);
         mPaint.setXfermode(null);
         mPaint.setAlpha(0xff);
+        coord = new ArrayList<Coordinates>();
 
+    }
+
+    private void simulateDrawing(ArrayList<Coordinates> newCoords) {
+        for(Coordinates event : newCoords){
+            switch (event.getAction()){
+                case MotionEvent.ACTION_DOWN :
+                    touchStart(event.getX(), event.getY(), false);
+                    invalidate();
+                    break;
+                case MotionEvent.ACTION_MOVE :
+                    touchMove(event.getX(), event.getY(), false);
+                    invalidate();
+                    break;
+                case MotionEvent.ACTION_UP :
+                    touchUp(event.getX(), event.getY(), false);
+                    invalidate();
+                    break;
+            }
+        }
     }
 
     public void init(DisplayMetrics metrics) {
@@ -90,8 +116,10 @@ public class PaintView extends View {
     public void clear() {
         backgroundColor = DEFAULT_BG_COLOR;
         paths.clear();
+        FirebaseDatabase.getInstance("https://guesswhoa-322a1-58abe.firebaseio.com/").getReference().removeValue();
         red();
         invalidate();
+
     }
 
     @Override
@@ -108,16 +136,11 @@ public class PaintView extends View {
                     //.build();
 
 
-            
+
             //FirebaseApp.initializeApp(this.getContext(), options, "guesswhoa-322a1-58abe");
             //FirebaseApp secondApp = FirebaseApp.getInstance("guesswhoa-322a1-58abe");
 
-            //FirebaseDatabase.getInstance("https://guesswhoa-322a1-58abe.firebaseio.com/")
-                    //.getReference()
-                    //.push()
-                    //.setValue(new FingerPath(fp.color, fp.strokeWidth, fp.path,fp.x,fp.y,fp.mx,fp.my
-                     //       )
-                   // );
+
             mPaint.setStrokeWidth(fp.strokeWidth);
             mPaint.setMaskFilter(null);
 
@@ -128,6 +151,12 @@ public class PaintView extends View {
             else
                 mPaint.setColor(DEFAULT_COLOR3);
 
+            //FirebaseDatabase.getInstance("https://guesswhoa-322a1-58abe.firebaseio.com/")
+              //      .getReference()
+                //    .push()
+                  //  .setValue(new FingerPath(fp.color, fp.strokeWidth, fp.path,fp.x,fp.y,fp.mx,fp.my
+                       //     )
+                    //);
             mCanvas.drawPath(fp.path, mPaint);
 
         }
@@ -136,20 +165,23 @@ public class PaintView extends View {
         canvas.restore();
     }
 
-    private void touchStart(float x, float y) {
+    private void touchStart(float x, float y, boolean addToCoord) {
         mPath = new Path();
+        FingerPath fp = new FingerPath(colorIndicator, strokeWidth, mPath, x,y,mX,mY);
+        paths.add(fp);
 
 
         mPath.reset();
         mPath.moveTo(x, y);
         mX = x;
         mY = y;
-        FingerPath fp = new FingerPath(colorIndicator, strokeWidth, mPath, x,y,mX,mY);
-        paths.add(fp);
 
+        if(addToCoord) {
+            coord.add(new Coordinates(x, y, MotionEvent.ACTION_DOWN));
+        }
     }
 
-    private void touchMove(float x, float y) {
+    private void touchMove(float x, float y, boolean addToCoord) {
 
         float dx = Math.abs(x - mX);
         float dy = Math.abs(y - mY);
@@ -160,18 +192,33 @@ public class PaintView extends View {
             System.out.println("y"+y);
             mX = x;
             mY = y;
+
+            if(addToCoord) {
+                coord.add(new Coordinates(x, y, MotionEvent.ACTION_MOVE));
+            }
         }
 
-        FirebaseDatabase.getInstance("https://guesswhoa-322a1-58abe.firebaseio.com/")
-            .getReference()
-             .push()
-            .setValue(new LocDBMes(x,y,colorIndicator,paths
-               )
-         );
+       // FirebaseDatabase.getInstance("https://guesswhoa-322a1-58abe.firebaseio.com/")
+          //  .getReference()
+           //  .push()
+            //.setValue(new LocDBMes(x,y,colorIndicator
+           //    )
+        // );
     }
 
-    private void touchUp() {
-        mPath.lineTo(mX, mY);
+    private void touchUp(float x, float y, boolean addToCoord) {
+        mPath.lineTo(x, y);
+        if(addToCoord) {
+            coord.add(new Coordinates(mX, mY,  MotionEvent.ACTION_UP));
+        }
+
+        for(Coordinates c : coord){
+            String nextStringIdx = getNextString();
+            FirebaseDatabase.getInstance("https://guesswhoa-322a1-58abe.firebaseio.com/").getReference().child(nextStringIdx).child("x").setValue(c.getX());
+            FirebaseDatabase.getInstance("https://guesswhoa-322a1-58abe.firebaseio.com/").getReference().child(nextStringIdx).child("y").setValue(c.getY());
+            FirebaseDatabase.getInstance("https://guesswhoa-322a1-58abe.firebaseio.com/").getReference().child(nextStringIdx).child("action").setValue(c.getAction());
+        }
+        coord.clear();
     }
 
     @Override
@@ -181,19 +228,30 @@ public class PaintView extends View {
 
         switch(event.getAction()) {
             case MotionEvent.ACTION_DOWN :
-                touchStart(x, y);
+                touchStart(x, y,true);
                 invalidate();
                 break;
             case MotionEvent.ACTION_MOVE :
-                touchMove(x, y);
+                touchMove(x, y,true);
                 invalidate();
                 break;
             case MotionEvent.ACTION_UP :
-                touchUp();
+                touchUp(x,y,true);
                 invalidate();
                 break;
         }
 
         return true;
+    }
+
+    private String getNextString(){
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append((new Date()).getTime());
+        Random random = new Random();
+        for(int i = 0; i < 32; i++){
+            int c = random.nextInt(26) + 97;
+            stringBuilder.append((char)c);
+        }
+        return stringBuilder.toString();
     }
 }
