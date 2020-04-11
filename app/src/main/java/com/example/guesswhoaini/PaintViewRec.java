@@ -10,6 +10,7 @@ import android.graphics.EmbossMaskFilter;
 import android.graphics.MaskFilter;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.net.wifi.WifiManager;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -26,6 +27,7 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
 
@@ -106,6 +108,10 @@ public class PaintViewRec extends View {
         canvas.save();
         mCanvas.drawColor(backgroundColor);
 
+        final List<LocDBMes> tempdb= new ArrayList<LocDBMes>();
+
+
+
         mSearchedLocationReference= FirebaseDatabase.getInstance("https://guesswhoa-322a1-58abe.firebaseio.com/")
                 .getReference();
 
@@ -113,9 +119,52 @@ public class PaintViewRec extends View {
                 new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
+                        tempdb.clear();
+                        boolean first = true;
+                       Iterable<DataSnapshot> children = dataSnapshot.getChildren();
 
-                        Log.d("Locations updated", "location: " + dataSnapshot); //log
+                       for(DataSnapshot child:children){
+                           LocDBMes locdbmes = child.getValue(LocDBMes.class);
+                           tempdb.add(locdbmes);
+                           Log.v("t","Received");
+                       }
+                        mPath = new Path();
+                        //mPath.reset();
+                        mPaint = new Paint();
+                        mPaint.setStrokeWidth(BRUSH_SIZE);
+                        mPaint.setMaskFilter(null);
+                        mPaint.setAntiAlias(true);
+                        mPaint.setDither(true);
+                        mPaint.setColor(DEFAULT_COLOR);
+                        mPaint.setStyle(Paint.Style.STROKE);
+                        mPaint.setStrokeJoin(Paint.Join.ROUND);
+                        mPaint.setStrokeCap(Paint.Cap.ROUND);
+                        mPaint.setXfermode(null);
+                        mPaint.setAlpha(0xff);
+                        for (LocDBMes a:tempdb) {
+                            if (a.color==0)
+                                mPaint.setColor(DEFAULT_COLOR);
+                            else if (a.color==1)
+                                mPaint.setColor(DEFAULT_COLOR2);
+                            else
+                                mPaint.setColor(DEFAULT_COLOR3);
 
+                            if(first){
+                                first = false;
+                                mPath.moveTo(a.x,a.y);
+                                Log.v("t","start to x: "+a.x);
+                                Log.v("t","start to y: "+a.x);
+                            }else{
+                                mPath.lineTo(a.x, a.y);
+                                Log.v("t","draw to x: "+a.x);
+                                Log.v("t","draw to Y: "+a.y);
+                            }
+
+
+                        }
+
+                        Log.v("t","Trying to print");
+                        mCanvas.drawPath(mPath, mPaint);
 
                     }
 
@@ -125,20 +174,6 @@ public class PaintViewRec extends View {
                     }
                 });
 
-        for (FingerPath fp : paths) {
-            mPaint.setStrokeWidth(fp.strokeWidth);
-            mPaint.setMaskFilter(null);
-
-            if (fp.color==0)
-                mPaint.setColor(DEFAULT_COLOR);
-            else if (fp.color==1)
-                mPaint.setColor(DEFAULT_COLOR2);
-            else
-                mPaint.setColor(DEFAULT_COLOR3);
-
-            //mCanvas.drawPath(fp.path, mPaint);
-
-        }
 
         canvas.drawBitmap(mBitmap, 0, 0, mBitmapPaint);
         canvas.restore();

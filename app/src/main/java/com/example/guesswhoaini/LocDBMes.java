@@ -10,13 +10,14 @@ public class LocDBMes {
     public float x;
     public float y;
     public int color;
-    public ArrayList<FingerPath> fpl;
 
-    public LocDBMes(float x, float y, int color, ArrayList<FingerPath> fpl) {
+    public LocDBMes(){}
+
+    public LocDBMes(float x, float y, int color) {
         this.color = color;
         this.x = x;
         this.y = y;
-        this.fpl = fpl;
+
     }
 
 }

@@ -15,7 +15,7 @@ public class PainttestRecActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_painttestrec);
 
-        paintViewRec = (PaintViewRec) findViewById(R.id.paintView);
+        paintViewRec = (PaintViewRec) findViewById(R.id.paintViewrec);
         DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
         paintViewRec.init(metrics);

@@ -165,7 +165,7 @@ public class PaintView extends View {
         FirebaseDatabase.getInstance("https://guesswhoa-322a1-58abe.firebaseio.com/")
             .getReference()
              .push()
-            .setValue(new LocDBMes(x,y,colorIndicator,paths
+            .setValue(new LocDBMes(x,y,colorIndicator
                )
          );
     }
