@@ -17,8 +17,12 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -51,7 +55,6 @@ public class PaintViewRec extends View {
     private Bitmap mBitmap;
     private Canvas mCanvas;
     private Paint mBitmapPaint = new Paint(Paint.DITHER_FLAG);
-    private LocDBMes dBMes= null;
     private DatabaseReference mSearchedLocationReference;
 
 
@@ -108,72 +111,52 @@ public class PaintViewRec extends View {
         canvas.save();
         mCanvas.drawColor(backgroundColor);
 
-        final List<LocDBMes> tempdb= new ArrayList<LocDBMes>();
-
-
-
         mSearchedLocationReference= FirebaseDatabase.getInstance("https://guesswhoa-322a1-58abe.firebaseio.com/")
                 .getReference();
+        mSearchedLocationReference.addChildEventListener(
+                new ChildEventListener() {
 
-        mSearchedLocationReference.addValueEventListener(
-                new ValueEventListener() {
                     @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        tempdb.clear();
-                        boolean first = true;
-                       Iterable<DataSnapshot> children = dataSnapshot.getChildren();
+                    public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                        paths.add(dataSnapshot.getValue(FingerPath.class));
+                        //Log.v("t","recved: "+temp.getPath().);
+                    }
 
-                       for(DataSnapshot child:children){
-                           LocDBMes locdbmes = child.getValue(LocDBMes.class);
-                           tempdb.add(locdbmes);
-                           Log.v("t","Received");
-                       }
-                        mPath = new Path();
-                        //mPath.reset();
-                        mPaint = new Paint();
-                        mPaint.setStrokeWidth(BRUSH_SIZE);
-                        mPaint.setMaskFilter(null);
-                        mPaint.setAntiAlias(true);
-                        mPaint.setDither(true);
-                        mPaint.setColor(DEFAULT_COLOR);
-                        mPaint.setStyle(Paint.Style.STROKE);
-                        mPaint.setStrokeJoin(Paint.Join.ROUND);
-                        mPaint.setStrokeCap(Paint.Cap.ROUND);
-                        mPaint.setXfermode(null);
-                        mPaint.setAlpha(0xff);
-                        for (LocDBMes a:tempdb) {
-                            if (a.color==0)
-                                mPaint.setColor(DEFAULT_COLOR);
-                            else if (a.color==1)
-                                mPaint.setColor(DEFAULT_COLOR2);
-                            else
-                                mPaint.setColor(DEFAULT_COLOR3);
-
-                            if(first){
-                                first = false;
-                                mPath.moveTo(a.x,a.y);
-                                Log.v("t","start to x: "+a.x);
-                                Log.v("t","start to y: "+a.x);
-                            }else{
-                                mPath.lineTo(a.x, a.y);
-                                Log.v("t","draw to x: "+a.x);
-                                Log.v("t","draw to Y: "+a.y);
-                            }
-
-
-                        }
-
-                        Log.v("t","Trying to print");
-                        mCanvas.drawPath(mPath, mPaint);
+                    @Override
+                    public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
 
                     }
 
                     @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        // read query is cancelled.
+                    public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+                    }
+
+                    @Override
+                    public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
                     }
                 });
 
+        for (FingerPath fp : paths) {
+            mPaint.setStrokeWidth(fp.strokeWidth);
+            mPaint.setMaskFilter(null);
+
+            if (fp.color==0)
+                mPaint.setColor(DEFAULT_COLOR);
+            else if (fp.color==1)
+                mPaint.setColor(DEFAULT_COLOR2);
+            else
+                mPaint.setColor(DEFAULT_COLOR3);
+
+            mCanvas.drawPath(fp.path, mPaint);
+
+        }
 
         canvas.drawBitmap(mBitmap, 0, 0, mBitmapPaint);
         canvas.restore();

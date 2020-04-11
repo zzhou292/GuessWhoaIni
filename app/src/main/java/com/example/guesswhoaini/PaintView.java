@@ -112,12 +112,7 @@ public class PaintView extends View {
             //FirebaseApp.initializeApp(this.getContext(), options, "guesswhoa-322a1-58abe");
             //FirebaseApp secondApp = FirebaseApp.getInstance("guesswhoa-322a1-58abe");
 
-            //FirebaseDatabase.getInstance("https://guesswhoa-322a1-58abe.firebaseio.com/")
-                    //.getReference()
-                    //.push()
-                    //.setValue(new FingerPath(fp.color, fp.strokeWidth, fp.path,fp.x,fp.y,fp.mx,fp.my
-                     //       )
-                   // );
+
             mPaint.setStrokeWidth(fp.strokeWidth);
             mPaint.setMaskFilter(null);
 
@@ -128,7 +123,13 @@ public class PaintView extends View {
             else
                 mPaint.setColor(DEFAULT_COLOR3);
 
-            mCanvas.drawPath(fp.path, mPaint);
+            //FirebaseDatabase.getInstance("https://guesswhoa-322a1-58abe.firebaseio.com/")
+              //      .getReference()
+                //    .push()
+                  //  .setValue(new FingerPath(fp.color, fp.strokeWidth, fp.path,fp.x,fp.y,fp.mx,fp.my
+                       //     )
+                    //);
+            //mCanvas.drawPath(fp.path, mPaint);
 
         }
 
@@ -162,12 +163,12 @@ public class PaintView extends View {
             mY = y;
         }
 
-        FirebaseDatabase.getInstance("https://guesswhoa-322a1-58abe.firebaseio.com/")
-            .getReference()
-             .push()
-            .setValue(new LocDBMes(x,y,colorIndicator
-               )
-         );
+       // FirebaseDatabase.getInstance("https://guesswhoa-322a1-58abe.firebaseio.com/")
+          //  .getReference()
+           //  .push()
+            //.setValue(new LocDBMes(x,y,colorIndicator
+           //    )
+        // );
     }
 
     private void touchUp() {
