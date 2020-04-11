@@ -49,7 +49,7 @@ public class PaintView extends View {
     private Paint mBitmapPaint = new Paint(Paint.DITHER_FLAG);
     private LocDBMes dBMes= null;
     private ArrayList<Coordinates> coord;
-    private HashSet<String> refKeys;
+
 
     public PaintView(Context context) {
         this(context, null);
@@ -57,7 +57,7 @@ public class PaintView extends View {
 
     public PaintView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        refKeys = new HashSet<String>();
+
         mPaint = new Paint();
         mPaint.setAntiAlias(true);
         mPaint.setDither(true);

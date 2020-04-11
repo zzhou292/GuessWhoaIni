@@ -60,7 +60,6 @@ public class PaintViewRec extends View {
     private LocDBMes dBMes= null;
     private ArrayList<Coordinates> coord;
 
-    private HashSet<String> refKeys;
 
     public PaintViewRec(Context context) {
         this(context, null);
@@ -78,7 +77,6 @@ public class PaintViewRec extends View {
         mPaint.setXfermode(null);
         mPaint.setAlpha(0xff);
         coord = new ArrayList<Coordinates>();
-        refKeys = new HashSet<String>();
 
     }
 
@@ -114,7 +112,6 @@ public class PaintViewRec extends View {
                     Coordinates currCoord = coordSnapshot.getValue(Coordinates.class);
                     newCoords.add(currCoord);
 
-                    refKeys.add(coordSnapshot.getKey());
                 }
                 simulateDrawing(newCoords);
             }
@@ -131,7 +128,6 @@ public class PaintViewRec extends View {
                 ArrayList<Coordinates> newCoord = new ArrayList<Coordinates>();
                 Coordinates currCoord = dataSnapshot.getValue(Coordinates.class);
                 newCoord.add(currCoord);
-                refKeys.add(dataSnapshot.getKey());
                 simulateDrawing(newCoord);
             }
 
@@ -180,12 +176,6 @@ public class PaintViewRec extends View {
     public void clear() {
         backgroundColor = DEFAULT_BG_COLOR;
         paths.clear();
-        for(String refKey : refKeys){
-            if(!refKey.equals("dummy")) {
-                FirebaseDatabase.getInstance("https://guesswhoa-322a1-58abe.firebaseio.com/").getReference().removeValue();
-            }
-        }
-        refKeys.clear();
 
         red();
         invalidate();
