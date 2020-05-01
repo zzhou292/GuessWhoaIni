@@ -20,7 +20,7 @@ public class ConfirmActivity extends AppCompatActivity {
 
         System.out.println((String)bundleEx.get("pickedName"));
         if(textViewwin!=null) {
-            textViewwin.setText((String)bundleEx.get("pickedName"));
+            textViewwin.setText((String)bundleEx.get("pickedName")+" is the Winner !!!!");
         }
     }
 

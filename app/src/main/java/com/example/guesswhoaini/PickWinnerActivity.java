@@ -28,6 +28,12 @@ public class PickWinnerActivity extends AppCompatActivity {
                 .setValue(pickedName.getText().toString()
                 );
 
+
+
+        Intent intent = new Intent(this,MainActivity.class);
+        startActivity(intent);
+
+
     }
 
 
