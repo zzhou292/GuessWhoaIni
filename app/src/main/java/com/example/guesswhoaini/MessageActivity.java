@@ -132,11 +132,11 @@ public class MessageActivity extends AppCompatActivity {
         FirebaseDatabase.getInstance("https://guesswhoa-322a1-414eb.firebaseio.com/").getReference().addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                String str="";
-                for(DataSnapshot stringSnapshot : dataSnapshot.getChildren()){
-                    String pickedName = stringSnapshot.getValue(String.class);
-                    str = pickedName;
-                }
+                String str="test";
+                //for(DataSnapshot stringSnapshot : dataSnapshot.getChildren()){
+                //    String pickedName = stringSnapshot.getValue(String.class);
+                //    str = pickedName;
+                //}
                 startActivity(str);
                 FirebaseDatabase.getInstance("https://guesswhoa-322a1-414eb.firebaseio.com/").getReference().removeValue();
             }
@@ -165,6 +165,7 @@ public class MessageActivity extends AppCompatActivity {
     {
         System.out.println("test stromg ;p;p; : "+str);
         Intent intent = new Intent(this, ConfirmActivity.class);
+        intent.putExtra("pickedName",str);
         startActivity(intent);
     }
 }
