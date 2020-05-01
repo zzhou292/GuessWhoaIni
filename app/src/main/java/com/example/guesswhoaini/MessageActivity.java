@@ -1,12 +1,9 @@
 package com.example.guesswhoaini;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Adapter;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -56,7 +53,7 @@ public class MessageActivity extends AppCompatActivity {
     }
 
     private void displayChatMessages() {
-        final ListView listOfMessages = (ListView)findViewById(R.id.list_of_messages);
+        final ListView listOfMessages = (ListView)findViewById(R.id.list_of_messages1);
 
         listOfMessages.setTranscriptMode(ListView.TRANSCRIPT_MODE_NORMAL);
         adapter = new FirebaseListAdapter<ChatMessage>(this, ChatMessage.class,

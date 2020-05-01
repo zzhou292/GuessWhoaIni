@@ -102,6 +102,7 @@ public class PaintViewRec extends View {
     public void init(DisplayMetrics metrics) {
         int height = metrics.heightPixels;
         int width = metrics.widthPixels;
+        mPath = new Path();
 
         FirebaseDatabase.getInstance("https://guesswhoa-322a1-58abe.firebaseio.com/").getReference().addValueEventListener(new ValueEventListener() {
             @SuppressLint("NewApi")
@@ -231,7 +232,9 @@ public class PaintViewRec extends View {
 
 
         mPath.reset();
+
         mPath.moveTo(x, y);
+
         mX = x;
         mY = y;
 
@@ -266,6 +269,7 @@ public class PaintViewRec extends View {
     }
 
     private void touchUp(float x, float y, boolean addToCoord) {
+
         mPath.lineTo(x, y);
         if(addToCoord) {
             coord.add(new Coordinates(mX, mY,  MotionEvent.ACTION_UP));
@@ -280,28 +284,28 @@ public class PaintViewRec extends View {
         coord.clear();
     }
 
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        float x = event.getX();
-        float y = event.getY();
+   // @Override
+    //public boolean onTouchEvent(MotionEvent event) {
+     //   float x = event.getX();
+    //    float y = event.getY();
 
-        switch(event.getAction()) {
-            case MotionEvent.ACTION_DOWN :
-                touchStart(x, y,true);
-                invalidate();
-                break;
-            case MotionEvent.ACTION_MOVE :
-                touchMove(x, y,true);
-                invalidate();
-                break;
-            case MotionEvent.ACTION_UP :
-                touchUp(x,y,true);
-                invalidate();
-                break;
-        }
+     //   switch(event.getAction()) {
+      //      case MotionEvent.ACTION_DOWN :
+      //          touchStart(x, y,true);
+      //          invalidate();
+      //          break;
+      //      case MotionEvent.ACTION_MOVE :
+       //         touchMove(x, y,true);
+       //         invalidate();
+         //       break;
+         //   case MotionEvent.ACTION_UP :
+         //       touchUp(x,y,true);
+          //      invalidate();
+          //      break;
+        //}
 
-        return true;
-    }
+        //return true;
+    //}
 
     private String getNextString(){
         StringBuilder stringBuilder = new StringBuilder();

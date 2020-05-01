@@ -71,24 +71,6 @@ public class PaintView extends View {
 
     }
 
-    private void simulateDrawing(ArrayList<Coordinates> newCoords) {
-        for(Coordinates event : newCoords){
-            switch (event.getAction()){
-                case MotionEvent.ACTION_DOWN :
-                    touchStart(event.getX(), event.getY(), false);
-                    invalidate();
-                    break;
-                case MotionEvent.ACTION_MOVE :
-                    touchMove(event.getX(), event.getY(), false);
-                    invalidate();
-                    break;
-                case MotionEvent.ACTION_UP :
-                    touchUp(event.getX(), event.getY(), false);
-                    invalidate();
-                    break;
-            }
-        }
-    }
 
     public void init(DisplayMetrics metrics) {
         int height = metrics.heightPixels;
