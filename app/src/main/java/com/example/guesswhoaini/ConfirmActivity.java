@@ -8,18 +8,19 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class ConfirmActivity extends AppCompatActivity {
-    TextView text;
+    TextView textViewwin;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        text = (TextView) findViewById(R.id.confirmText);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_winnerconfirm);
 
-
+        textViewwin = (TextView) findViewById(R.id.confirmText2);
         Bundle bundleEx = getIntent().getExtras();
 
-        if(bundleEx!=null) {
-            text.setText((String)bundleEx.get("pickedName"));
+        System.out.println((String)bundleEx.get("pickedName"));
+        if(textViewwin!=null) {
+            textViewwin.setText((String)bundleEx.get("pickedName"));
         }
     }
 
