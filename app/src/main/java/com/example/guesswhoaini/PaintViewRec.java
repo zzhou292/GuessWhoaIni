@@ -174,15 +174,15 @@ public class PaintViewRec extends View {
     }
 
     public void red() {
-        mPaint.setColor(DEFAULT_COLOR);
+        colorIndicator = 0;
     }
 
     public void green() {
-        mPaint.setColor(DEFAULT_COLOR2);
+        colorIndicator = 1;
     }
 
     public void blue() {
-        mPaint.setColor(DEFAULT_COLOR3);
+        colorIndicator = 2;
     }
 
     public void clear() {
