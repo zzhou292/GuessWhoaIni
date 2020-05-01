@@ -6,15 +6,17 @@ public class Coordinates {
     private float x;
     private float y;
     private int action;
+    private int color;
 
     public Coordinates(){
         /* Empty for Firebase to be able to deserialize coordinates */
     }
 
-    public Coordinates(float x, float y, int action) {
+    public Coordinates(float x, float y, int action,int color) {
         this.x = x;
         this.y = y;
         this.action = action;
+        this.color = color;
     }
 
     public float getX() {
@@ -29,4 +31,6 @@ public class Coordinates {
     public int getAction() {
         return action;
     }
+
+    public int getColor(){return color;}
 }

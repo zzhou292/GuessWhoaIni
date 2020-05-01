@@ -159,7 +159,7 @@ public class PaintView extends View {
         mY = y;
 
         if(addToCoord) {
-            coord.add(new Coordinates(x, y, MotionEvent.ACTION_DOWN));
+            coord.add(new Coordinates(x, y, MotionEvent.ACTION_DOWN,colorIndicator));
         }
     }
 
@@ -176,7 +176,7 @@ public class PaintView extends View {
             mY = y;
 
             if(addToCoord) {
-                coord.add(new Coordinates(x, y, MotionEvent.ACTION_MOVE));
+                coord.add(new Coordinates(x, y, MotionEvent.ACTION_MOVE,colorIndicator));
             }
         }
 
@@ -191,7 +191,7 @@ public class PaintView extends View {
     private void touchUp(float x, float y, boolean addToCoord) {
         mPath.lineTo(x, y);
         if(addToCoord) {
-            coord.add(new Coordinates(mX, mY,  MotionEvent.ACTION_UP));
+            coord.add(new Coordinates(mX, mY,  MotionEvent.ACTION_UP, colorIndicator));
         }
 
         for(Coordinates c : coord){
@@ -199,6 +199,7 @@ public class PaintView extends View {
             FirebaseDatabase.getInstance("https://guesswhoa-322a1-58abe.firebaseio.com/").getReference().child(nextStringIdx).child("x").setValue(c.getX());
             FirebaseDatabase.getInstance("https://guesswhoa-322a1-58abe.firebaseio.com/").getReference().child(nextStringIdx).child("y").setValue(c.getY());
             FirebaseDatabase.getInstance("https://guesswhoa-322a1-58abe.firebaseio.com/").getReference().child(nextStringIdx).child("action").setValue(c.getAction());
+            FirebaseDatabase.getInstance("https://guesswhoa-322a1-58abe.firebaseio.com/").getReference().child(nextStringIdx).child("color").setValue(c.getColor());
         }
         coord.clear();
     }

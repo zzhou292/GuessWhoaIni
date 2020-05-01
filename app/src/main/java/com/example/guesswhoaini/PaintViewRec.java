@@ -82,19 +82,30 @@ public class PaintViewRec extends View {
 
     private void simulateDrawing(ArrayList<Coordinates> newCoords) {
         for(Coordinates event : newCoords){
-            switch (event.getAction()){
-                case MotionEvent.ACTION_DOWN :
-                    touchStart(event.getX(), event.getY(), false);
-                    invalidate();
-                    break;
-                case MotionEvent.ACTION_MOVE :
-                    touchMove(event.getX(), event.getY(), false);
-                    invalidate();
-                    break;
-                case MotionEvent.ACTION_UP :
-                    touchUp(event.getX(), event.getY(), false);
-                    invalidate();
-                    break;
+            if(event.getColor()==0)
+            {
+                red();
+            }else if(event.getColor()==1)
+            {
+                green();
+            }else{
+                blue();
+            }
+            if(event.getY()!=0) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        touchStart(event.getX(), event.getY(), false);
+                        invalidate();
+                        break;
+                    case MotionEvent.ACTION_MOVE:
+                        touchMove(event.getX(), event.getY(), false);
+                        invalidate();
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        touchUp(event.getX(), event.getY(), false);
+                        invalidate();
+                        break;
+                }
             }
         }
     }
@@ -105,14 +116,13 @@ public class PaintViewRec extends View {
         mPath = new Path();
 
         FirebaseDatabase.getInstance("https://guesswhoa-322a1-58abe.firebaseio.com/").getReference().addValueEventListener(new ValueEventListener() {
-            @SuppressLint("NewApi")
+            //@SuppressLint("NewApi")
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 ArrayList<Coordinates> newCoords = new ArrayList<Coordinates>();
                 for(DataSnapshot coordSnapshot : dataSnapshot.getChildren()){
                     Coordinates currCoord = coordSnapshot.getValue(Coordinates.class);
                     newCoords.add(currCoord);
-
                 }
                 simulateDrawing(newCoords);
             }
@@ -126,14 +136,14 @@ public class PaintViewRec extends View {
         FirebaseDatabase.getInstance("https://guesswhoa-322a1-58abe.firebaseio.com/").getReference().addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                ArrayList<Coordinates> newCoord = new ArrayList<Coordinates>();
-                Coordinates currCoord = dataSnapshot.getValue(Coordinates.class);
-                newCoord.add(currCoord);
-                simulateDrawing(newCoord);
+                //ArrayList<Coordinates> newCoord = new ArrayList<Coordinates>();
+                //Coordinates currCoord = dataSnapshot.getValue(Coordinates.class);
+                //newCoords.add(currCoord);
+                //simulateDrawing();
             }
 
             @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+           public void onChildChanged(DataSnapshot dataSnapshot, String s) {
 
             }
 
@@ -151,6 +161,7 @@ public class PaintViewRec extends View {
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
+
         });
 
 
@@ -163,15 +174,15 @@ public class PaintViewRec extends View {
     }
 
     public void red() {
-        colorIndicator = 0;
+        mPaint.setColor(DEFAULT_COLOR);
     }
 
     public void green() {
-        colorIndicator = 1;
+        mPaint.setColor(DEFAULT_COLOR2);
     }
 
     public void blue() {
-        colorIndicator = 2;
+        mPaint.setColor(DEFAULT_COLOR3);
     }
 
     public void clear() {
@@ -185,7 +196,12 @@ public class PaintViewRec extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         canvas.save();
-        mCanvas.drawColor(backgroundColor);
+        if(mCanvas!=null) {
+            mCanvas.drawColor(backgroundColor);
+        }else{
+            mCanvas = new Canvas();
+            mCanvas.drawColor(backgroundColor);
+        }
 
         for (FingerPath fp : paths) {
 
@@ -226,21 +242,22 @@ public class PaintViewRec extends View {
     }
 
     private void touchStart(float x, float y, boolean addToCoord) {
+
         mPath = new Path();
         FingerPath fp = new FingerPath(colorIndicator, strokeWidth, mPath, x,y,mX,mY);
         paths.add(fp);
-
-
-        mPath.reset();
-
+        System.out.println("start !!!! x"+x);
+        System.out.println("start !!!! y"+y);
+        System.out.println("start !!!! mx"+mX);
+        System.out.println("start !!!! my"+mY);
         mPath.moveTo(x, y);
 
         mX = x;
         mY = y;
 
-        if(addToCoord) {
-            coord.add(new Coordinates(x, y, MotionEvent.ACTION_DOWN));
-        }
+        //if(addToCoord) {
+        //    coord.add(new Coordinates(x, y, MotionEvent.ACTION_DOWN));
+        //}
     }
 
     private void touchMove(float x, float y, boolean addToCoord) {
@@ -250,14 +267,12 @@ public class PaintViewRec extends View {
 
         if (dx >= TOUCH_TOLERANCE || dy >= TOUCH_TOLERANCE) {
             mPath.quadTo(mX, mY, (x + mX) / 2, (y + mY) / 2);
-            System.out.println("x"+x);
-            System.out.println("y"+y);
             mX = x;
             mY = y;
 
-            if(addToCoord) {
-                coord.add(new Coordinates(x, y, MotionEvent.ACTION_MOVE));
-            }
+            //if(addToCoord) {
+             //   coord.add(new Coordinates(x, y, MotionEvent.ACTION_MOVE));
+            //}
         }
 
         // FirebaseDatabase.getInstance("https://guesswhoa-322a1-58abe.firebaseio.com/")
@@ -271,17 +286,17 @@ public class PaintViewRec extends View {
     private void touchUp(float x, float y, boolean addToCoord) {
 
         mPath.lineTo(x, y);
-        if(addToCoord) {
-            coord.add(new Coordinates(mX, mY,  MotionEvent.ACTION_UP));
-        }
+        //if(addToCoord) {
+        //    coord.add(new Coordinates(mX, mY,  MotionEvent.ACTION_UP));
+        //}
 
-        for(Coordinates c : coord){
-            String nextStringIdx = getNextString();
-            FirebaseDatabase.getInstance("https://guesswhoa-322a1-58abe.firebaseio.com/").getReference().child(nextStringIdx).child("x").setValue(c.getX());
-            FirebaseDatabase.getInstance("https://guesswhoa-322a1-58abe.firebaseio.com/").getReference().child(nextStringIdx).child("y").setValue(c.getY());
-            FirebaseDatabase.getInstance("https://guesswhoa-322a1-58abe.firebaseio.com/").getReference().child(nextStringIdx).child("action").setValue(c.getAction());
-        }
-        coord.clear();
+        //for(Coordinates c : coord){
+         //   String nextStringIdx = getNextString();
+         //   FirebaseDatabase.getInstance("https://guesswhoa-322a1-58abe.firebaseio.com/").getReference().child(nextStringIdx).child("x").setValue(c.getX());
+         //   FirebaseDatabase.getInstance("https://guesswhoa-322a1-58abe.firebaseio.com/").getReference().child(nextStringIdx).child("y").setValue(c.getY());
+         //   FirebaseDatabase.getInstance("https://guesswhoa-322a1-58abe.firebaseio.com/").getReference().child(nextStringIdx).child("action").setValue(c.getAction());
+        //}
+        //coord.clear();
     }
 
    // @Override
