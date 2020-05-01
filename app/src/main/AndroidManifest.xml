@@ -18,7 +18,9 @@
         <activity android:name=".MessageActivity"></activity>
         <activity android:name=".PainttestRecActivity"></activity>
         <activity android:name=".SelectRoleActivity"></activity>
+        <activity android:name=".PickWinnerActivity"></activity>
         <activity android:name=".MainActivity">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

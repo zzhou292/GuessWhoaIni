@@ -23,4 +23,9 @@
         android:id="@+id/clear"
         app:showAsAction = "never"
         android:title="Clear"/>
+
+    <item
+        android:id="@+id/pick"
+        app:showAsAction = "never"
+        android:title="Pick a Winner"/>
 </menu>
