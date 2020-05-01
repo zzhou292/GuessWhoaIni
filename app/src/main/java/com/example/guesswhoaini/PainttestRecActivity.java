@@ -1,7 +1,11 @@
 package com.example.guesswhoaini;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -21,11 +25,24 @@ public class PainttestRecActivity extends AppCompatActivity {
         paintViewRec.init(metrics);
     }
 
-    //database connection code
-     /*FirebaseDatabase.getInstance("https://guesswhoa-322a1-58abe.firebaseio.com/")
-             .getReference()
-             .push()
-            .setValue(new LocDBMes(x,y,colorIndicator
-                      )*/
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.menu3, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()) {
+            case R.id.switchchat:
+                Intent intent = new Intent(this,MessageActivity.class);
+                startActivity(intent);
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+
 
 }
