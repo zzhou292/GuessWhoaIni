@@ -13,12 +13,16 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.firebase.ui.database.FirebaseListAdapter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 
 
@@ -36,6 +40,7 @@ public class MessageActivity extends AppCompatActivity {
         setContentView(R.layout.message1);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         displayChatMessages();
+        detectWinner();
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -101,6 +106,7 @@ public class MessageActivity extends AppCompatActivity {
             });
             counter++;
         }
+        //detectWinner();
     }
 
 
@@ -120,5 +126,45 @@ public class MessageActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void detectWinner(){
+        FirebaseDatabase.getInstance("https://guesswhoa-322a1-414eb.firebaseio.com/").getReference().addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                String str="";
+                for(DataSnapshot stringSnapshot : dataSnapshot.getChildren()){
+                    String pickedName = stringSnapshot.getValue(String.class);
+                    str = pickedName;
+                }
+                startActivity(str);
+                FirebaseDatabase.getInstance("https://guesswhoa-322a1-414eb.firebaseio.com/").getReference().removeValue();
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+
+        });
+    }
+
+    public void startActivity(String str)
+    {
+        System.out.println("test stromg ;p;p; : "+str);
+        Intent intent = new Intent(this, ConfirmActivity.class);
+        startActivity(intent);
     }
 }

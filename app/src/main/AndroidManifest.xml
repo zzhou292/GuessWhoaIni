@@ -19,6 +19,7 @@
         <activity android:name=".PainttestRecActivity"></activity>
         <activity android:name=".SelectRoleActivity"></activity>
         <activity android:name=".PickWinnerActivity"></activity>
+        <activity android:name=".ConfirmActivity"></activity>
         <activity android:name=".MainActivity">
 
             <intent-filter>
