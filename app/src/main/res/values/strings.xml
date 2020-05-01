@@ -6,4 +6,7 @@
     <string name="bluetooth_log_in">BlueTooth Log In</string>
     <string name="please_enter_your_name">Please Enter Your Name</string>
     <string name="log_in">Log In</string>
+    <string name="todo">TODO</string>
+    <string name="paint_test_rec">Paint Test Rec</string>
+    <string name="paint_test">Paint Test</string>
 </resources>
