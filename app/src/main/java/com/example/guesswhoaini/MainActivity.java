@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void startFunction(View view)
     {
-        Intent intent = new Intent(this,IntloginActivity.class);
+        Intent intent = new Intent(this,SelectRoleActivity.class);
         startActivity(intent);
     }
 
