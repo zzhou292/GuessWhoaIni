@@ -37,6 +37,12 @@ import java.util.Random;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
 
+/**
+ * This class is the painting board on the receiver side
+ * The painting board has the simulation function
+ * but it doesn't have on touch draw function
+ * to ensure consistency
+ */
 
 public class PaintViewRec extends View {
 
@@ -66,6 +72,7 @@ public class PaintViewRec extends View {
     }
 
     public PaintViewRec(Context context, AttributeSet attrs) {
+        //hardcode default settings
         super(context, attrs);
         mPaint = new Paint();
         mPaint.setAntiAlias(true);
@@ -80,8 +87,15 @@ public class PaintViewRec extends View {
 
     }
 
+    /**
+     * The simulate drawing is going to draw all data points received from database
+     * @param newCoords each coordinate is a data packet which includes:
+     *                  x, y , action type, color
+     */
     private void simulateDrawing(ArrayList<Coordinates> newCoords) {
         for(Coordinates event : newCoords){
+            //before anything is done, an if-else clause
+            //is used to hardcode color
             if(event.getColor()==0)
             {
                 red();
@@ -91,16 +105,21 @@ public class PaintViewRec extends View {
             }else{
                 blue();
             }
+            //the if getY clause is used to eliminate a bug
+            //it's not believed this clause has side effect
             if(event.getY()!=0) {
                 switch (event.getAction()) {
+                    // branch to action down
                     case MotionEvent.ACTION_DOWN:
                         touchStart(event.getX(), event.getY(), false);
                         invalidate();
                         break;
+                    // branch to action move
                     case MotionEvent.ACTION_MOVE:
                         touchMove(event.getX(), event.getY(), false);
                         invalidate();
                         break;
+                    // branch to action up
                     case MotionEvent.ACTION_UP:
                         touchUp(event.getX(), event.getY(), false);
                         invalidate();
@@ -110,20 +129,29 @@ public class PaintViewRec extends View {
         }
     }
 
+    //initialization function
+    //will be called everytime it starts
     public void init(DisplayMetrics metrics) {
+        //retrieve hardcoded height pixel
         int height = metrics.heightPixels;
+        //retrieve hardcoded width pixel
         int width = metrics.widthPixels;
+        //create a new path for further use
         mPath = new Path();
 
         FirebaseDatabase.getInstance("https://guesswhoa-322a1-58abe.firebaseio.com/").getReference().addValueEventListener(new ValueEventListener() {
             //@SuppressLint("NewApi")
             @Override
+            //detection on database data change
             public void onDataChange(DataSnapshot dataSnapshot) {
                 ArrayList<Coordinates> newCoords = new ArrayList<Coordinates>();
                 for(DataSnapshot coordSnapshot : dataSnapshot.getChildren()){
                     Coordinates currCoord = coordSnapshot.getValue(Coordinates.class);
                     newCoords.add(currCoord);
                 }
+                //after data packets were retrieved from the database
+                //and stored in newCoords array
+                //perform simulation on the newCoords array
                 simulateDrawing(newCoords);
             }
 
@@ -135,6 +163,9 @@ public class PaintViewRec extends View {
         });
         FirebaseDatabase.getInstance("https://guesswhoa-322a1-58abe.firebaseio.com/").getReference().addChildEventListener(new ChildEventListener() {
             @Override
+            //this detection is temporarily disabled
+            //it's believed a bug can be caused if using on ChildAdded
+            //no side effects detected
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 //ArrayList<Coordinates> newCoord = new ArrayList<Coordinates>();
                 //Coordinates currCoord = dataSnapshot.getValue(Coordinates.class);
@@ -173,18 +204,24 @@ public class PaintViewRec extends View {
         strokeWidth = BRUSH_SIZE;
     }
 
+    // color brancher based on received data packet color field
+    // red branch
     public void red() {
         colorIndicator = 0;
     }
 
+    //green branch
     public void green() {
         colorIndicator = 1;
     }
 
+    //blue branch
     public void blue() {
         colorIndicator = 2;
     }
 
+    //clear branch, this is not actually needed
+    //but added for simplier modulization
     public void clear() {
         backgroundColor = DEFAULT_BG_COLOR;
         paths.clear();
@@ -241,15 +278,21 @@ public class PaintViewRec extends View {
         canvas.restore();
     }
 
+    //touch start simulation function
     private void touchStart(float x, float y, boolean addToCoord) {
 
         mPath = new Path();
         FingerPath fp = new FingerPath(colorIndicator, strokeWidth, mPath, x,y,mX,mY);
         paths.add(fp);
+
+        //system output used for debugging
+        //can be reduced or deleted
         System.out.println("start !!!! x"+x);
         System.out.println("start !!!! y"+y);
         System.out.println("start !!!! mx"+mX);
         System.out.println("start !!!! my"+mY);
+
+        //move line to x and y
         mPath.moveTo(x, y);
 
         mX = x;
@@ -260,6 +303,7 @@ public class PaintViewRec extends View {
         //}
     }
 
+    //touch move simulation function
     private void touchMove(float x, float y, boolean addToCoord) {
 
         float dx = Math.abs(x - mX);
@@ -283,6 +327,7 @@ public class PaintViewRec extends View {
         // );
     }
 
+    //touch up simulation function
     private void touchUp(float x, float y, boolean addToCoord) {
 
         mPath.lineTo(x, y);
