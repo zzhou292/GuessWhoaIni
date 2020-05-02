@@ -27,6 +27,10 @@ import java.util.Random;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
 
+/**
+ * This class serves as the painter board on the painter side
+ * Main functionalities include local drawing and sending package
+ */
 
 public class PaintView extends View {
 
@@ -83,18 +87,23 @@ public class PaintView extends View {
         strokeWidth = BRUSH_SIZE;
     }
 
+    //color selection brancher function
+    //color red branch
     public void red() {
         colorIndicator = 0;
     }
 
+    //color green branch
     public void green() {
         colorIndicator = 1;
     }
 
+    //color blue branch
     public void blue() {
         colorIndicator = 2;
     }
 
+    //clear branch
     public void clear() {
         backgroundColor = DEFAULT_BG_COLOR;
         paths.clear();
@@ -126,6 +135,8 @@ public class PaintView extends View {
             mPaint.setStrokeWidth(fp.strokeWidth);
             mPaint.setMaskFilter(null);
 
+            //hardcode the color selection
+            //based on the color indicator
             if (fp.color==0)
                 mPaint.setColor(DEFAULT_COLOR);
             else if (fp.color==1)
@@ -147,6 +158,13 @@ public class PaintView extends View {
         canvas.restore();
     }
 
+    /**
+     * This function is called when a "touch down" simulation starts
+     * This is the initial touch of a line
+     * @param x touch down x coordinate
+     * @param y touch down y coordinate
+     * @param addToCoord    whether add to data array and send to database
+     */
     private void touchStart(float x, float y, boolean addToCoord) {
         mPath = new Path();
         FingerPath fp = new FingerPath(colorIndicator, strokeWidth, mPath, x,y,mX,mY);
@@ -163,18 +181,35 @@ public class PaintView extends View {
         }
     }
 
+    /**
+     * This function is called when finger is moving and constantly collecting data
+     * @param x the x coordinate during moving
+     * @param y the y coordinate during moving
+     * @param addToCoord whether to add this data point to the record
+     */
     private void touchMove(float x, float y, boolean addToCoord) {
 
+        //the amount of displacement on x direction
         float dx = Math.abs(x - mX);
+        //the amount of displacement on y direction
         float dy = Math.abs(y - mY);
 
+        //if the movement is believed to be larger than tolerance
+        //start drawing line using quadTo
         if (dx >= TOUCH_TOLERANCE || dy >= TOUCH_TOLERANCE) {
             mPath.quadTo(mX, mY, (x + mX) / 2, (y + mY) / 2);
-            System.out.println("x"+x);
-            System.out.println("y"+y);
+            //debugging helper - print out x y coordinates data
+            //System.out.println("x"+x);
+            //System.out.println("y"+y);
+
+            //update last x point
+            //the current floater
             mX = x;
+            //update last y point
+            //the current floater
             mY = y;
 
+            //if add to cord, save the current coordinate to the data array
             if(addToCoord) {
                 coord.add(new Coordinates(x, y, MotionEvent.ACTION_MOVE,colorIndicator));
             }
@@ -188,36 +223,63 @@ public class PaintView extends View {
         // );
     }
 
+    /**
+     * This function is called when the painter's finger is removed from the screen
+     * touch up function finishes one line
+     * @param x the finishing x coordinate
+     * @param y the finishing y coordinate
+     * @param addToCoord whether to add the current data point to the data array
+     */
     private void touchUp(float x, float y, boolean addToCoord) {
+        //using lineTo to finish drawing the line
         mPath.lineTo(x, y);
+
+        //if addToCoord is true
+        //then we add the current coordinate point to the data array
         if(addToCoord) {
             coord.add(new Coordinates(mX, mY,  MotionEvent.ACTION_UP, colorIndicator));
         }
 
+
+        //after finger is removed
+        //and one line is finished
+        //start uploading current data to the database
         for(Coordinates c : coord){
             String nextStringIdx = getNextString();
+            //x coordinate field
             FirebaseDatabase.getInstance("https://guesswhoa-322a1-58abe.firebaseio.com/").getReference().child(nextStringIdx).child("x").setValue(c.getX());
+            //y coordinate field
             FirebaseDatabase.getInstance("https://guesswhoa-322a1-58abe.firebaseio.com/").getReference().child(nextStringIdx).child("y").setValue(c.getY());
+            //action field
             FirebaseDatabase.getInstance("https://guesswhoa-322a1-58abe.firebaseio.com/").getReference().child(nextStringIdx).child("action").setValue(c.getAction());
+            //color field
             FirebaseDatabase.getInstance("https://guesswhoa-322a1-58abe.firebaseio.com/").getReference().child(nextStringIdx).child("color").setValue(c.getColor());
         }
         coord.clear();
     }
 
+    /**
+     * Brancher which determines which action number does what action
+     * @param event the current motion event
+     * @return
+     */
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         float x = event.getX();
         float y = event.getY();
 
         switch(event.getAction()) {
+            //branch to action down
             case MotionEvent.ACTION_DOWN :
                 touchStart(x, y,true);
                 invalidate();
                 break;
+            //branch to action move
             case MotionEvent.ACTION_MOVE :
                 touchMove(x, y,true);
                 invalidate();
                 break;
+            //branch to action up
             case MotionEvent.ACTION_UP :
                 touchUp(x,y,true);
                 invalidate();
@@ -227,6 +289,10 @@ public class PaintView extends View {
         return true;
     }
 
+    /**
+     * Automatic index generator for more ordered database access
+     * @return a string which is an ordered while unique id
+     */
     private String getNextString(){
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append((new Date()).getTime());
