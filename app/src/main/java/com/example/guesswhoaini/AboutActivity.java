@@ -6,6 +6,10 @@ import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+/**
+ * This Activity contains information of the authors
+ * This Activity is activated when the "ABOUT" button on the main page is pressed
+ */
 public class AboutActivity extends AppCompatActivity {
 
     @Override

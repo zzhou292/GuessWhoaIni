@@ -7,6 +7,14 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+/**
+ * After a message is sent to confirm the winner
+ * A child node will be added to Firebase Realtime database
+ * https://guesswhoa-322a1-414eb.firebaseio.com/
+ *
+ * This Activity will be activated when an "add child" is detected
+ */
+
 public class ConfirmActivity extends AppCompatActivity {
     TextView textViewwin;
     @Override

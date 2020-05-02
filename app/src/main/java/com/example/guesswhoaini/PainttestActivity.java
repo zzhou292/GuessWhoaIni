@@ -18,6 +18,13 @@ import android.widget.Adapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+/**
+ * This activity will invoke a fully-functional painting board
+ * This activity is designed for painter
+ *
+ * At the same time
+ * A chat-room activity will be displayed at the bottom half of the activity
+ */
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -34,10 +41,13 @@ public class PainttestActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_painttest);
 
+        //initiate and display the painting board(painter side)
         paintView = (PaintView) findViewById(R.id.paintView);
         DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
         paintView.init(metrics);
+
+        //display chat-room on the other half of the screen
         displayChatMessages();
     }
 
@@ -51,18 +61,24 @@ public class PainttestActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
+            //change the stroke color to red
             case R.id.red:
                 paintView.red();
                 return true;
+            //change the stroke color to green
             case R.id.green:
                 paintView.green();
                 return true;
+            //change the stroke color to blue
             case R.id.blue:
                 paintView.blue();
                 return true;
+            //clear the painting board
             case R.id.clear:
                 paintView.clear();
                 return true;
+            //this option is going to bring up pick winner activity
+            //which allows the painter to type in the name of the winner
             case R.id.pick:
                 Intent intent = new Intent(this,PickWinnerActivity.class);
                 startActivity(intent);
@@ -87,6 +103,7 @@ public class PainttestActivity extends AppCompatActivity {
                 R.layout.message, FirebaseDatabase.getInstance().getReference()) {
             @Override
 
+            //populate messages stored in the database.
             protected void populateView(View v, ChatMessage model, int position) {
 
                 if (model.getType() != 1 && model != null) {
@@ -113,6 +130,8 @@ public class PainttestActivity extends AppCompatActivity {
         listOfMessages.setAdapter(adapter);
     }
 
+    //This function helps the chat room to always keep the newest message received
+    //at bottom
     private void scrollMyListViewToBottom(final ListView myListView, final Adapter myListAdapter) {
         if(counter == 0)
         {

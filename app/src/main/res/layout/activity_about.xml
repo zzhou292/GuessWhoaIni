@@ -39,7 +39,7 @@
         android:id="@+id/textView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Developer: \nBocheng Lin, blin37@wisc.edu \nChongxi Yuan, cyuan42@wisc.edu\nJason Zhou, zzhou292@wisc.edu"
+        android:text="Developer: \nJason Zhou, zzhou292@wisc.edu\nChongxi Yuan, cyuan42@wisc.edu"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

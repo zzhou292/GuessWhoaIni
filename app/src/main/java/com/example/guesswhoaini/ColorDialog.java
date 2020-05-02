@@ -10,6 +10,11 @@ import android.view.LayoutInflater;
 
 import androidx.appcompat.app.AppCompatDialogFragment;
 
+/**
+ * This class is an accessory class which can be implemented as a part of the
+ * Painting Board
+ */
+
 public class ColorDialog extends AppCompatDialogFragment {
 
 //public Dialog onCreateDialog(Bundle savedInstanceState){

@@ -2,6 +2,12 @@ package com.example.guesswhoaini;
 
 import java.util.Date;
 
+/**
+ * This class represents one chat message
+ * The object includes the username, text string, and message time
+ * The type field is for testing only, no real application in this app
+ */
+
 public class ChatMessage {
 
     private String messageText;
