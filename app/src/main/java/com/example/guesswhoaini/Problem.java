@@ -5,7 +5,7 @@ public class Problem {
     String[] problem_list;
     int randi;
     public Problem(){
-        String problem_str="angle\n" +
+         problem_str="angle\n" +
                 "ant\n" +
                 "apple\n" +
                 "arch\n" +
@@ -205,7 +205,7 @@ public class Problem {
                 "wing\n" +
                 "wire\n" +
                 "worm";
-        String problem_list[] = problem_str.split("\n");
+            problem_list= problem_str.split("\n");
     }
     public String getProblem(int randi){
         String choice=problem_list[randi];
