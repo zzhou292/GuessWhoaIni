@@ -38,6 +38,7 @@ public class PainttestActivity extends AppCompatActivity {
     FirebaseAuth mFirebaseAuth = FirebaseAuth.getInstance();
     FirebaseUser mFirebaseUser = mFirebaseAuth.getCurrentUser();
     private FirebaseListAdapter<ChatMessage> adapter;
+    private String questionStr;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,6 +89,8 @@ public class PainttestActivity extends AppCompatActivity {
             case R.id.pick:
                 Intent intent = new Intent(this,PickWinnerActivity.class);
                 startActivity(intent);
+            case R.id.problem:
+                problemReview();
         }
 
         return super.onOptionsItemSelected(item);
@@ -158,7 +161,13 @@ public class PainttestActivity extends AppCompatActivity {
         Random ran=new Random();
         int randi = ran.nextInt(len-1);
         String que= problem.getProblem(randi);
+        questionStr=que;
         String toastStr="The Suggested Problem is "+que;
+        // show problem on screen via toast
+        Toast.makeText(PainttestActivity.this,toastStr,Toast.LENGTH_SHORT).show();
+    }
+    public void problemReview(){
+        String toastStr="The Suggested Problem is "+questionStr;
         // show problem on screen via toast
         Toast.makeText(PainttestActivity.this,toastStr,Toast.LENGTH_SHORT).show();
     }

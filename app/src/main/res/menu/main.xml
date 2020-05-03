@@ -28,4 +28,8 @@
         android:id="@+id/pick"
         app:showAsAction = "never"
         android:title="Pick a Winner"/>
+    <item
+        android:id="@+id/problem"
+        app:showAsAction = "never"
+        android:title="Review Problem"/>
 </menu>
