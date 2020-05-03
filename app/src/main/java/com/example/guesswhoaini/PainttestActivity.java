@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.Adapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * This activity will invoke a fully-functional painting board
@@ -27,6 +28,8 @@ import android.widget.TextView;
  */
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import java.util.Random;
 
 public class PainttestActivity extends AppCompatActivity {
 
@@ -49,6 +52,9 @@ public class PainttestActivity extends AppCompatActivity {
 
         //display chat-room on the other half of the screen
         displayChatMessages();
+
+        //show problem in a toast
+        problemShow();
     }
 
     @Override
@@ -144,5 +150,16 @@ public class PainttestActivity extends AppCompatActivity {
             });
             counter++;
         }
+    }
+    public void problemShow(){
+        Problem problem=new Problem();
+        int len=problem.getLength();
+        // generate random int to get question
+        Random ran=new Random();
+        int randi = ran.nextInt(len-1);
+        String que= problem.getProblem(randi);
+        String toastStr="The Suggested Problem is "+que;
+        // show problem on screen via toast
+        Toast.makeText(PainttestActivity.this,toastStr,Toast.LENGTH_SHORT).show();
     }
 }
