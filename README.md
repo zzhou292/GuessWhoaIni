@@ -7,3 +7,6 @@ This program is designed and implemented as the final project for UW Madison COM
 Programmer:
 Jason Zhou zzhou292@wisc.edu
 Chongxi Yuan cyuan42@wisc.edu
+
+Demo Video can be found under the root Github Directory or Youtube Link: 
+https://youtu.be/CEAgtiJKJcU
